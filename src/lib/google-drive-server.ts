@@ -4,7 +4,24 @@ import { Readable } from 'stream';
 const FOLDER_MIME = 'application/vnd.google-apps.folder';
 
 function getAuth() {
-  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY || '{}');
+  const raw = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
+  if (!raw) {
+    throw new Error('GOOGLE_SERVICE_ACCOUNT_KEY env var is not set');
+  }
+
+  let credentials;
+  try {
+    credentials = JSON.parse(raw);
+  } catch {
+    throw new Error('GOOGLE_SERVICE_ACCOUNT_KEY is not valid JSON');
+  }
+
+  if (!credentials.client_email) {
+    throw new Error(
+      `Service account JSON is missing client_email. Keys found: ${Object.keys(credentials).join(', ')}`,
+    );
+  }
+
   return new google.auth.GoogleAuth({
     credentials,
     scopes: ['https://www.googleapis.com/auth/drive'],
