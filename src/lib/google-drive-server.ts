@@ -45,20 +45,21 @@ async function findOrCreateFolder(
 ): Promise<string> {
   const query = `name='${name}' and mimeType='${FOLDER_MIME}' and '${parentId}' in parents and trashed=false`;
 
-  const listParams: Record<string, unknown> = {
-    q: query,
-    fields: 'files(id)',
-    supportsAllDrives: true,
-    includeItemsFromAllDrives: true,
-  };
-
-  // For Shared Drives, must specify corpora and driveId
-  if (driveId) {
-    listParams.corpora = 'drive';
-    listParams.driveId = driveId;
-  }
-
-  const res = await drive.files.list(listParams as Parameters<typeof drive.files.list>[0]);
+  const res = driveId
+    ? await drive.files.list({
+        q: query,
+        fields: 'files(id)',
+        supportsAllDrives: true,
+        includeItemsFromAllDrives: true,
+        corpora: 'drive',
+        driveId,
+      })
+    : await drive.files.list({
+        q: query,
+        fields: 'files(id)',
+        supportsAllDrives: true,
+        includeItemsFromAllDrives: true,
+      });
 
   const files = res.data.files;
   if (files && files.length > 0 && files[0].id) {
