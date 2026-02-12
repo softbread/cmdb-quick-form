@@ -46,7 +46,7 @@ export default function Home() {
       }
 
       setStatus('success');
-      setMessage(`Uploaded "${data.name}" to ${data.folder}/ on Google Drive.`);
+      setMessage(`Uploaded "${data.name}" to ${data.folder}/.`);
       setTicker('');
       if (textRef.current) textRef.current.value = '';
       setTextSize(0);
@@ -61,7 +61,7 @@ export default function Home() {
     <div className={styles.container}>
       <h1 className={styles.title}>CMDB Quick Form</h1>
       <p className={styles.subtitle}>
-        Enter a ticker and text content. The text will be saved as a .txt file on Google Drive.
+        Enter a ticker and text content. The text will be saved as a .txt file.
       </p>
 
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -91,7 +91,7 @@ export default function Home() {
           className={styles.btn}
           disabled={status === 'loading'}
         >
-          {status === 'loading' ? 'Uploading…' : 'Save to Google Drive'}
+          {status === 'loading' ? 'Submitting…' : 'Submit'}
         </button>
 
         {message && (
