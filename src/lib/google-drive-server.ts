@@ -4,35 +4,29 @@ import { Readable } from 'stream';
 const FOLDER_MIME = 'application/vnd.google-apps.folder';
 
 function getAuth() {
-  // Support two modes:
-  // 1. GOOGLE_SERVICE_ACCOUNT_KEY = full JSON (works locally)
-  // 2. GOOGLE_SA_CLIENT_EMAIL + GOOGLE_SA_PRIVATE_KEY = separate vars (works on Vercel)
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
-  const saEmail = process.env.GOOGLE_SA_CLIENT_EMAIL;
-  const saKey = process.env.GOOGLE_SA_PRIVATE_KEY;
+  if (!raw) {
+    throw new Error('GOOGLE_SERVICE_ACCOUNT_KEY env var is not set');
+  }
 
-  let credentials: { client_email: string; private_key: string };
-
-  if (saEmail && saKey) {
-    credentials = {
-      client_email: saEmail,
-      private_key: saKey.replace(/\\n/g, '\n'),
-    };
-  } else if (raw) {
-    try {
-      credentials = JSON.parse(raw);
-    } catch {
-      throw new Error('GOOGLE_SERVICE_ACCOUNT_KEY is not valid JSON');
-    }
+  // Support both raw JSON and base64-encoded JSON
+  let json: string;
+  if (raw.trimStart().startsWith('{')) {
+    json = raw;
   } else {
-    throw new Error(
-      'Set either GOOGLE_SERVICE_ACCOUNT_KEY or both GOOGLE_SA_CLIENT_EMAIL and GOOGLE_SA_PRIVATE_KEY',
-    );
+    json = Buffer.from(raw, 'base64').toString('utf-8');
+  }
+
+  let credentials;
+  try {
+    credentials = JSON.parse(json);
+  } catch {
+    throw new Error('GOOGLE_SERVICE_ACCOUNT_KEY is not valid JSON (raw or base64)');
   }
 
   if (!credentials.client_email) {
     throw new Error(
-      `Service account credentials missing client_email. Keys found: ${Object.keys(credentials).join(', ')}`,
+      `Service account JSON missing client_email. Keys found: ${Object.keys(credentials).join(', ')}`,
     );
   }
 
