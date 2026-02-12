@@ -1,18 +1,25 @@
 # CMDB Quick Form
 
-A simple form that accepts a ticker/title and text content, converts the text to a `.txt` file, and uploads it to Google Drive under `/CmdbForm/{ticker}/`.
+A simple form that accepts a ticker/title and text content, converts the text to a `.txt` file, and uploads it to Google Drive under `/CmdbForm/{ticker}/`. No user login required — uploads happen server-side via a Google service account.
 
 ## Google Cloud Setup
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project (or use an existing one)
 3. Enable the **Google Drive API** under APIs & Services
-4. Create credentials:
-   - **OAuth 2.0 Client ID** (Application type: Web application)
-     - Add `http://localhost:3000` to Authorized JavaScript origins (for local dev)
-     - Add your Vercel production URL (e.g. `https://your-app.vercel.app`) to Authorized JavaScript origins
-   - **API Key**
-5. Configure the OAuth consent screen (External or Internal depending on your needs)
+4. Create a **Service Account**:
+   - Go to IAM & Admin → Service Accounts → Create Service Account
+   - Give it a name (e.g. `cmdb-form-uploader`)
+   - Click Create and Continue (no roles needed)
+   - Click Done
+5. Create a key for the service account:
+   - Click on the service account → Keys → Add Key → Create new key → JSON
+   - Download the JSON key file
+6. **Share a Google Drive folder with the service account**:
+   - In Google Drive, create a folder (or use your root)
+   - Share it with the service account's email (e.g. `cmdb-form-uploader@your-project.iam.gserviceaccount.com`)
+   - Give it **Editor** access
+   - The app will create `CmdbForm/` inside the service account's Drive (or the shared folder)
 
 ## Local Development
 
@@ -22,11 +29,15 @@ npm install
 
 # Create env file
 cp .env.example .env.local
+```
 
-# Edit .env.local and fill in your credentials:
-#   NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-#   NEXT_PUBLIC_GOOGLE_API_KEY=your-api-key
+Edit `.env.local` and paste the entire service account JSON key as a single line:
 
+```
+GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"...@...iam.gserviceaccount.com",...}
+```
+
+```bash
 # Start dev server
 npm run dev
 ```
@@ -37,9 +48,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 1. Push this repo to GitHub
 2. Go to [vercel.com/new](https://vercel.com/new) and import the repository
-3. Add environment variables in Vercel project settings:
-   - `NEXT_PUBLIC_GOOGLE_CLIENT_ID`
-   - `NEXT_PUBLIC_GOOGLE_API_KEY`
+3. Add the environment variable in Vercel project settings:
+   - `GOOGLE_SERVICE_ACCOUNT_KEY` — paste the full JSON key as a single line
 4. Deploy
 
 Alternatively, deploy via the Vercel CLI:
@@ -49,14 +59,11 @@ npm i -g vercel
 vercel
 ```
 
-Set the environment variables when prompted, or configure them beforehand:
+Set the environment variable:
 
 ```bash
-vercel env add NEXT_PUBLIC_GOOGLE_CLIENT_ID
-vercel env add NEXT_PUBLIC_GOOGLE_API_KEY
+vercel env add GOOGLE_SERVICE_ACCOUNT_KEY
 ```
-
-Remember to add your Vercel deployment URL to the **Authorized JavaScript origins** in your Google Cloud OAuth client settings.
 
 ## File Structure on Google Drive
 
@@ -71,3 +78,10 @@ My Drive/
     └── MSFT/
         └── MSFT_2026-02-12T15-45-00-789Z.txt
 ```
+
+## Features
+
+- **Ticker autocomplete** — searches Yahoo Finance as you type
+- **Large text support** — handles up to 10MB of text
+- **No user login** — uploads via server-side service account
+- **Auto-organized** — files sorted into folders by ticker

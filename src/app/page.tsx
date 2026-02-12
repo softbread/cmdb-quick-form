@@ -1,7 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { isSignedIn, loadGoogleScripts, signIn, uploadTextFile } from '@/lib/google-drive';
+import { useCallback, useRef, useState } from 'react';
 import TickerInput from './TickerInput';
 import styles from './page.module.css';
 
@@ -13,20 +12,10 @@ export default function Home() {
   const [textSize, setTextSize] = useState(0);
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
-  const [gsiReady, setGsiReady] = useState(false);
 
   const handleTextChange = useCallback(() => {
     const len = textRef.current?.value.length ?? 0;
     setTextSize(len);
-  }, []);
-
-  useEffect(() => {
-    loadGoogleScripts()
-      .then(() => setGsiReady(true))
-      .catch((err) => {
-        console.error('Failed to load Google scripts', err);
-        setMessage('Failed to load Google API. Check your API key / client ID.');
-      });
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,16 +33,20 @@ export default function Home() {
     setMessage('');
 
     try {
-      if (!isSignedIn()) {
-        await signIn();
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticker: ticker.trim(), text }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Upload failed');
       }
 
-      const trimmedTicker = ticker.trim();
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const fileName = `${trimmedTicker}_${timestamp}.txt`;
-      const result = await uploadTextFile(trimmedTicker, fileName, text);
       setStatus('success');
-      setMessage(`Uploaded "${result.name}" to CmdbForm/${trimmedTicker}/ on Google Drive.`);
+      setMessage(`Uploaded "${data.name}" to ${data.folder}/ on Google Drive.`);
       setTicker('');
       if (textRef.current) textRef.current.value = '';
       setTextSize(0);
@@ -68,7 +61,7 @@ export default function Home() {
     <div className={styles.container}>
       <h1 className={styles.title}>CMDB Quick Form</h1>
       <p className={styles.subtitle}>
-        Enter a ticker and text content. The text will be saved as a .txt file on your Google Drive.
+        Enter a ticker and text content. The text will be saved as a .txt file on Google Drive.
       </p>
 
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -96,7 +89,7 @@ export default function Home() {
         <button
           type="submit"
           className={styles.btn}
-          disabled={status === 'loading' || !gsiReady}
+          disabled={status === 'loading'}
         >
           {status === 'loading' ? 'Uploading…' : 'Save to Google Drive'}
         </button>
@@ -112,8 +105,7 @@ export default function Home() {
 }
 
 function formatSize(chars: number): string {
-  const bytes = new Blob(['']).size === 0 ? chars : chars; // rough estimate
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  if (chars < 1024) return `${chars} B`;
+  if (chars < 1024 * 1024) return `${(chars / 1024).toFixed(1)} KB`;
+  return `${(chars / (1024 * 1024)).toFixed(1)} MB`;
 }
