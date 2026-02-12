@@ -1,0 +1,158 @@
+.container {
+  width: 100%;
+  max-width: 720px;
+  padding: 2rem 0;
+}
+
+.title {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.sizeHint {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.input,
+.textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #4a90d9;
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.15);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 200px;
+}
+
+.btn {
+  align-self: flex-start;
+  padding: 0.65rem 1.5rem;
+  background: #4a90d9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+  background: #357abd;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.message {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.success {
+  background: #e6f4ea;
+  color: #1a7f37;
+}
+
+.error {
+  background: #fde8e8;
+  color: #c53030;
+}
+
+/* Autocomplete */
+.autocomplete {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 4px 0;
+  z-index: 10;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.dropdownItem:hover,
+.dropdownItemActive {
+  background: #f0f4fa;
+}
+
+.dropdownSymbol {
+  font-weight: 700;
+  min-width: 5rem;
+  color: #213547;
+}
+
+.dropdownName {
+  flex: 1;
+  color: #555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownExchange {
+  font-size: 0.75rem;
+  color: #999;
+  white-space: nowrap;
+}
