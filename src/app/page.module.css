@@ -4,6 +4,32 @@
   padding: 2rem 0;
 }
 
+.nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #d8dee7;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #2e3c50;
+  background: #f4f7fb;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.navLinkActive {
+  border-color: #4a90d9;
+  background: #e9f2fc;
+  color: #1f5a91;
+}
+
 .title {
   font-size: 1.75rem;
   margin-bottom: 0.25rem;

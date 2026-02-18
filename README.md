@@ -1,6 +1,6 @@
 # CMDB Quick Form
 
-A simple form that accepts a ticker/title and text content, converts the text to a `.txt` file, and uploads it to Google Drive under `/CmdbForm/{ticker}/`. No user login required — uploads happen server-side via a Google service account.
+A simple form that accepts a ticker/title and text content, converts the text to a `.txt` file, and uploads it to Google Drive under `/{ticker}/` in your configured root folder. It also includes a dedicated page to search ticker notes and generate Gemini summaries from either the latest note or all notes in that ticker folder.
 
 ## Google Cloud Setup
 
@@ -19,7 +19,7 @@ A simple form that accepts a ticker/title and text content, converts the text to
    - In Google Drive, create a folder (or use your root)
    - Share it with the service account's email (e.g. `cmdb-form-uploader@your-project.iam.gserviceaccount.com`)
    - Give it **Editor** access
-   - The app will create `CmdbForm/` inside the service account's Drive (or the shared folder)
+   - The app will create per-ticker folders directly inside that configured root folder
 
 ## Local Development
 
@@ -35,6 +35,10 @@ Edit `.env.local` and paste the entire service account JSON key as a single line
 
 ```
 GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"...@...iam.gserviceaccount.com",...}
+GOOGLE_DRIVE_FOLDER_ID=your-root-folder-id
+GEMINI_API_KEY=your-gemini-api-key
+# Optional:
+# GEMINI_MODEL=gemini-2.5-flash
 ```
 
 ```bash
@@ -70,13 +74,12 @@ vercel env add GOOGLE_SERVICE_ACCOUNT_KEY
 Each submission creates a timestamped `.txt` file:
 
 ```
-My Drive/
-└── CmdbForm/
-    ├── AAPL/
-    │   ├── AAPL_2026-02-12T15-30-45-123Z.txt
-    │   └── AAPL_2026-02-12T16-00-12-456Z.txt
-    └── MSFT/
-        └── MSFT_2026-02-12T15-45-00-789Z.txt
+Configured Root Folder/
+├── AAPL/
+│   ├── AAPL_2026-02-12T15-30-45-123Z.txt
+│   └── AAPL_2026-02-12T16-00-12-456Z.txt
+└── MSFT/
+    └── MSFT_2026-02-12T15-45-00-789Z.txt
 ```
 
 ## Features
@@ -85,3 +88,5 @@ My Drive/
 - **Large text support** — handles up to 10MB of text
 - **No user login** — uploads via server-side service account
 - **Auto-organized** — files sorted into folders by ticker
+- **Ticker note search** — check whether a ticker has notes in Google Drive
+- **Gemini summaries** — generate summaries from the latest note or all notes in the ticker folder

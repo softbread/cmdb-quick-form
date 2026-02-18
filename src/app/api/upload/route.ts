@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       id: result.id,
       name: result.name,
-      folder: `CmdbForm/${trimmedTicker}`,
+      folder: trimmedTicker,
     });
   } catch (err) {
     console.error('Upload error:', err);

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useRef, useState } from 'react';
 import TickerInput from './TickerInput';
 import styles from './page.module.css';
@@ -59,6 +60,11 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
+      <nav className={styles.nav}>
+        <Link href="/" className={`${styles.navLink} ${styles.navLinkActive}`}>Upload Notes</Link>
+        <Link href="/notes" className={styles.navLink}>Search & Summarize</Link>
+      </nav>
+
       <h1 className={styles.title}>CMDB Quick Form</h1>
       <p className={styles.subtitle}>
         Enter a ticker and text content. The text will be saved as a .txt file.

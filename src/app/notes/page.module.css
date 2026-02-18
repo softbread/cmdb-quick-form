@@ -1,0 +1,249 @@
+.container {
+  width: 100%;
+  max-width: 900px;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #d8dee7;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #2e3c50;
+  background: #f4f7fb;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.navLinkActive {
+  border-color: #4a90d9;
+  background: #e9f2fc;
+  color: #1f5a91;
+}
+
+.title {
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  color: #667085;
+}
+
+.card {
+  border: 1px solid #dbe4ef;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.btn {
+  align-self: flex-start;
+  padding: 0.65rem 1.2rem;
+  background: #4a90d9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: #357abd;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.message {
+  padding: 0.65rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.success {
+  background: #e6f4ea;
+  color: #1a7f37;
+}
+
+.error {
+  background: #fde8e8;
+  color: #c53030;
+}
+
+.notesPreview {
+  border-top: 1px solid #edf2f8;
+  padding-top: 0.75rem;
+}
+
+.notesHeading {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.notesList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.notesListItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #eef3f8;
+  border-radius: 6px;
+  background: #fafcff;
+}
+
+.fileName {
+  font-weight: 500;
+}
+
+.fileTime {
+  color: #667085;
+  white-space: nowrap;
+}
+
+.scopeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.scopeOption {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.summaryBox {
+  border-top: 1px solid #edf2f8;
+  padding-top: 0.75rem;
+}
+
+.summaryMeta {
+  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+  color: #475467;
+}
+
+.summaryText {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  border: 1px solid #e8eef6;
+  border-radius: 8px;
+  background: #fbfdff;
+  padding: 1rem;
+  max-height: 480px;
+  overflow: auto;
+}
+
+.summaryText :global(p) {
+  color: #1f2937;
+  margin: 0 0 0.75rem;
+}
+
+.summaryText :global(h1),
+.summaryText :global(h2),
+.summaryText :global(h3),
+.summaryText :global(h4) {
+  color: #0f172a;
+  font-weight: 700;
+  margin: 0.85rem 0 0.45rem;
+}
+
+.summaryText :global(h1) {
+  font-size: 1.2rem;
+}
+
+.summaryText :global(h2) {
+  font-size: 1.1rem;
+}
+
+.summaryText :global(h3) {
+  font-size: 1rem;
+}
+
+.summaryText :global(h4) {
+  font-size: 0.95rem;
+}
+
+.summaryText :global(ul),
+.summaryText :global(ol) {
+  margin: 0 0 0.8rem 1.25rem;
+  color: #1f2937;
+}
+
+.summaryText :global(li) {
+  margin-bottom: 0.35rem;
+}
+
+.summaryText :global(blockquote) {
+  margin: 0 0 0.85rem;
+  border-left: 3px solid #bfd7f3;
+  padding: 0.2rem 0.75rem;
+  color: #334155;
+  background: #f4f9ff;
+  border-radius: 0 6px 6px 0;
+}
+
+.summaryText :global(pre) {
+  margin: 0 0 0.85rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e1e8f0;
+  background: #f8fafc;
+  white-space: pre-wrap;
+  font-family: ui-monospace, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  overflow-x: auto;
+}
+
+.summaryText :global(code) {
+  font-family: ui-monospace, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.85em;
+  padding: 0.1rem 0.35rem;
+  border: 1px solid #dfe7ef;
+  border-radius: 4px;
+  background: #f7fafc;
+}
+
+.summaryText :global(pre code) {
+  padding: 0;
+  border: none;
+  background: transparent;
+}

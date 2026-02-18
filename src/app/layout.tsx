@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'CMDB Quick Form',
-  description: 'Submit text content to Google Drive',
+  description: 'Upload ticker notes to Google Drive and generate Gemini summaries',
 };
 
 export default function RootLayout({
